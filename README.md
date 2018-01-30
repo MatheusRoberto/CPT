@@ -1,9 +1,10 @@
 # CPT
 
-Projeto para venda parcelada de viagens de turismo
+<p>Projeto para venda parcelada de viagens de turismo</p>
 
-#Requisitos
-Java
-Grassfish 4.1
-BD Mysql
-
+<h2>Requisitos</h2>
+<ul>
+<li>Java</li>
+<li>Grassfish 4.1</li>
+<li>Mysql</li>
+</ul>
