@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="TravelPackagesEditDlg" widgetVar="TravelPackagesEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditTravelPackagesTitle}">
+            <h:form id="TravelPackagesEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{travelPackagesController.travel != null}">
+                        <p:outputLabel value="#{bundle.EditTravelPackagesLabel_travel}" for="travel" />
+                        <p:inputText id="travel" value="#{travelPackagesController.travel.travel}" title="#{bundle.EditTravelPackagesTitle_travel}" required="true" requiredMessage="#{bundle.EditTravelPackagesRequiredMessage_travel}"/>
+                        <p:outputLabel value="#{bundle.CreateTravelPackagesLabel_departure}" for="departure" />
+                        <p:calendar id="departure" pattern="dd/MM/yyyy" value="#{travelPackagesController.travel.departure}"
+                                    title="#{bundle.EditTravelPackagesTitle_departure}" mask="true" showOn="button"
+                                    mindate="today" locale="br" navigator="true"
+                                    >
+                            <p:ajax event="dateSelect" listener="#{travelPackagesController.setDataInicial(travelPackagesController.travel.departure)}" update="arrival"/>
+                        </p:calendar>
+                        <p:outputLabel value="#{bundle.CreateTravelPackagesLabel_arrival}" for="arrival" />
+                        <p:calendar id="arrival" pattern="dd/MM/yyyy" value="#{travelPackagesController.travel.arrival}"
+                                    title="#{bundle.EditTravelPackagesTitle_arrival}"  showOn="button" mask="true"
+                                    mindate="#{travelPackagesController.dataInicial}" locale="br" navigator="true">
+                        </p:calendar>
+                        <p:outputLabel value="#{bundle.CreateTravelPackagesLabel_value}" for="value" />
+                        <p:inputNumber id="value" value="#{travelPackagesController.travel.value}" symbol="R$" decimalPlaces="2" decimalSeparator=","
+                                       title="#{bundle.CreateTravelPackagesTitle_value}" 
+                                       required="true" 
+                                       requiredMessage="#{bundle.CreateTravelPackagesRequiredMessage_value}"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{travelPackagesController.update}" value="#{bundle.Save}" update="display,:TravelPackagesListForm:list,:growl" oncomplete="handleSubmit(args, 'TravelPackagesEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="TravelPackagesEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

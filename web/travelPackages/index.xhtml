@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Cadastro de Viagens"></h:outputText>
+        </ui:define>
+
+        <ui:define class="TravelPackageCreateForm" name="body">
+            <h:form id="createForm"  acceptcharset="ISO-8859-1">
+                <p:fieldset legend="Cadastro" toggleable="true" toggleSpeed="500">
+                    <p:panelGrid id="panelCreate" styleClass="ui-noborder">
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Viagem: " for="travel" />
+                                <p:inputText id="travel" value="#{travelPackagesController.selected.travel}" 
+                                             title="Digite nome da viagem" 
+                                             required="true" 
+                                             requiredMessage="Nome da viagem é obrigátorio"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Data de ida: " for="departure" />
+                                <p:calendar id="departure" pattern="dd/MM/yyyy" 
+                                            value="#{travelPackagesController.selected.departure}"
+                                            title="Selecione data de ida" mask="true" showOn="button"
+                                            mindate="today" locale="br" navigator="true"
+                                            >
+                                    <p:ajax event="dateSelect" listener="#{travelPackagesController.setDataInicial(travelPackagesController.selected.departure)}" update="arrival"/>
+                                </p:calendar>
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Data de Volta: " for="arrival" />
+                                <p:calendar id="arrival" pattern="dd/MM/yyyy" 
+                                            value="#{travelPackagesController.selected.arrival}"
+                                            title="Selecione data de retorno"  showOn="button" mask="true"
+                                            mindate="#{travelPackagesController.dataInicial}" 
+                                            locale="br" navigator="true">
+                                </p:calendar>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Valor: " for="value" />
+                                <p:inputNumber id="value" 
+                                               value="#{travelPackagesController.selected.value}" 
+                                               symbol="R$" decimalPlaces="2" decimalSeparator=","
+                                               title="Digite o valor da viagem" 
+                                               required="true" 
+                                               requiredMessage="O valo é obrigátorio"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="text-align: center">
+                                <p:commandButton actionListener="#{travelPackagesController.create()}" 
+                                                 process="@all" icon="ui-icon-plus"
+                                                 value="Salvar" update="panelCreate createForm">
+                                </p:commandButton>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </p:fieldset>
+            </h:form>
+            <br/>
+        </ui:define>
+
+    </ui:composition>
+</html>

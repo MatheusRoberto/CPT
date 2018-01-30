@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Cadastro de Clientes"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form id="createForm" acceptcharset="ISO-8859-1">
+                <p:fieldset legend="Cadastro" toggleable="true" toggleSpeed="500">
+                    <p:panelGrid id="panelCreate" styleClass="ui-noborder" columns="2">
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Nome: " for="name" />
+                                <p:inputText id="name" value="#{customersController.selected.name}" title="Nome cliente" required="true" requiredMessage="Nome do Cliete é obrigátorio"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="RG: " for="rg" />
+                                <p:inputText id="rg" value="#{customersController.selected.rg}" 
+                                             title="RG do cliente" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:commandButton actionListener="#{customersController.create()}" 
+                                             process="@all" icon="ui-icon-plus"
+                                             value="Salvar" update="createForm">
+                            </p:commandButton>
+                        </p:row>
+                    </p:panelGrid>
+                </p:fieldset>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

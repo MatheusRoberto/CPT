@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title><ui:insert name="title">Default Title</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+    </h:head>
+
+    <h:body>
+
+        <p:growl id="growl" life="3000" />
+
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="65" header="CPT - Controle de Pagamento Parcelado de Turismo">
+                <h:form id="menuForm" style="text-align: center">
+                    <p:menubar >
+                        <p:menuitem value="Tela Inicial" outcome="/index" icon="ui-icon-home"/>
+                        <p:submenu label="Menu">
+                            <p:submenu label="Clientes">
+                                <p:menuitem value="Listar" outcome="/customers/List.xhtml" />
+                                <p:menuitem value="Cadastrar" outcome="/customers/Create.xhtml"/>
+                            </p:submenu>
+                            <p:menuitem value="Parcelas" outcome="/plots/PayDay.xhtml" />
+                            <p:menuitem value="Venda" outcome="/sales/index.xhtml" />
+                            <p:submenu label="Pacotes de Viagem">
+                                <p:menuitem value="Listar" 
+                                            outcome="/travelPackages/List.xhtml" />
+                                <p:menuitem value="Cadastrar" outcome="/travelPackages/index.xhtml"/>
+                            </p:submenu>
+                        </p:submenu>
+                    </p:menubar>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                <ui:insert name="body"/>
+            </p:layoutUnit>
+
+        </p:layout>
+
+    </h:body>
+
+</html>

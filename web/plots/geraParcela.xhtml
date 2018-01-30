@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PlotsGenereteDlg" widgetVar="PlotsGenereteDialog"
+                  modal="true" resizable="false" appendTo="@(body)" 
+                  header="Gera Parcela">
+            <h:form id="PlotsCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid id="panelPlots" class="ui-noborder" columns="2">
+                        <p:outputLabel for="valueTotal" value="Valor Total: "/>
+                        <h:outputText id="valueTotal" value="#{salesController.total}">
+                            <f:convertNumber currencySymbol="R$" minFractionDigits="2" type="currency"/>
+                        </h:outputText>
+                        <h:outputLabel value="Número de Vezes: " for="parcela" />
+                        <p:inputNumber id="parcela"
+                                       value="#{salesController.numberPlots}"
+                                       title="Quantidade de Parcelas" 
+                                       required="true" 
+                                       requiredMessage="Digite número de parcelas"  minValue="1"
+                                       decimalPlaces="0">
+                            <p:ajax event="change" listener="#{salesController.geraData()}" update="listdata, valuePlots"/>
+                        </p:inputNumber>
+                        <p:outputLabel value="Data de Vencimento: " for="dtVencimento" />
+                        <p:calendar id="dtVencimento" pattern="dd/MM/yyyy" value="#{salesController.firstDate}"
+                                    title="Data de Vencimento" mask="true" showOn="button"
+                                    mindate="today" locale="br" navigator="true"
+                                    >
+                            <p:ajax event="dateSelect" listener="#{salesController.geraData()}" update="listdata"/>
+                        </p:calendar>
+                        <p:outputLabel for="valuePlots" value="Valor de cada Parcela: "/>
+                        <h:outputText id="valuePlots" value="#{salesController.valuePlots}">
+                            <f:convertNumber currencySymbol="R$" minFractionDigits="2" type="currency"/>
+                        </h:outputText>
+                    </p:panelGrid>
+                            <p:dataList id="listdata" value="#{salesController.datas}" var="item" type="ordered" paginator="true" rows="12" styleClass="paginated">
+                                <f:facet name="header">
+                                    Datas de Vencimento
+                                </f:facet>
+                                <h:outputText value="#{item}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY"/>
+                                </h:outputText>
+                            </p:dataList>
+                        <br/>
+                    <h:panelGrid width="100%" style="text-align: center">
+                        <p:commandButton ajax="false" value="Finalizar e Imprimir"
+                                         action="#{salesController.create()}"
+                                         />
+
+                    </h:panelGrid>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+    </ui:composition>
+
+</html>

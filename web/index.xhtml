@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="CPT - Inicial"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <p:panelGrid columns="2">
+                <p:dataTable id="payDayList"
+                             var="item"
+                             value="#{plotsController.plotsPayDay}"
+                             rows="10" paginator="true"
+                             emptyMessage="Sem parcelas á receber hoje"
+
+                             >
+                    <f:facet name="header">
+                        Parcela á receber hoje.
+                    </f:facet>
+                    <p:column headerText="Contrato" style="width: 50px">
+                        <p:outputLabel value="#{item.salesId.id}"/>
+                    </p:column>
+                    <p:column headerText="Cliente">
+                        <p:outputLabel value="#{item.salesId.customersId.name}"/>
+                    </p:column>
+                    <p:column headerText="Valor" style="width: 120px">
+                        <p:outputLabel value="#{item.value}">
+                            <f:convertNumber minFractionDigits="2" currencySymbol="R$" type="currency"/>
+                        </p:outputLabel>
+                    </p:column>
+                </p:dataTable>
+                <p:dataTable id="nextTravels" var="item" 
+                             value="#{travelPackagesController.listNextTravels}"
+                             paginator="true" rows="10" styleClass="paginated"
+                             emptyMessage="Sem viagens nos proximos 15 dias">
+                    <f:facet name="header">
+                        Viagens nos próximos 15 dias.
+                    </f:facet>
+                    <p:column headerText="Viagem: ">
+                        <p:outputLabel value="#{item.travel}" />
+                    </p:column>
+                    <p:column headerText="Data: " style="width: 150px">
+                        <p:outputLabel value="#{item.departure}">
+                            <f:convertDateTime parent="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>        
+                </p:dataTable>
+            </p:panelGrid>
+        </ui:define>
+
+    </ui:composition>
+
+
+
+
+</html>
+
