@@ -26,7 +26,10 @@
                                 <p:menuitem value="Cadastrar" outcome="/customers/Create.xhtml"/>
                             </p:submenu>
                             <p:menuitem value="Parcelas" outcome="/plots/PayDay.xhtml" />
-                            <p:menuitem value="Venda" outcome="/sales/index.xhtml" />
+                            <p:submenu label="Venda">
+                                <p:menuitem value="Listar" outcome="/sales/List.xhtml"/>
+                                <p:menuitem value="Vender" outcome="/sales/index.xhtml" />
+                            </p:submenu>
                             <p:submenu label="Pacotes de Viagem">
                                 <p:menuitem value="Listar" 
                                             outcome="/travelPackages/List.xhtml" />

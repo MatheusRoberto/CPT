@@ -5,9 +5,11 @@
  */
 package jpa.session;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import jpa.entities.Sales;
 import jpa.entities.SalesItems;
 
 /**
@@ -29,4 +31,11 @@ public class SalesItemsFacade extends AbstractFacade<SalesItems> {
         super(SalesItems.class);
     }
     
+    public List<SalesItems> findBySale(Sales s){
+        return em.createNamedQuery("SalesItems.findBySale").setParameter("sale", s).getResultList();
+    }
+    
+    public List<SalesItems> listItemsAndSale() {
+        return em.createNamedQuery("SalesItems.listAll").getResultList();
+    }
 }

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Edição de Venda"></h:outputText>
+        </ui:define>
+
+        <ui:define class="SalesCreateForm" name="body">
+            <h:form id="createForm"  acceptcharset="ISO-8859-1">
+                <p:fieldset legend="Venda" toggleable="false">
+                    <p:panelGrid id="panelCustomer" styleClass="ui-noborder">
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="customers" value="Cliente: "/>
+                                <p:selectOneMenu id="customers" 
+                                                 value="#{salesController.selected.customersId}"
+                                                 title="Selecione um Cliente" 
+                                                 required="true" 
+                                                 requiredMessage="Escolha de um cliente é obrigátorio"
+                                                 filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{customersController.itemsAvailableSelectOne}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </p:fieldset>
+                <br/>   
+                <p:fieldset legend="Viagens" toggleable="false" toggleSpeed="500">
+                    <p:panelGrid id="panelViagem" styleClass="ui-noborder">
+                        <p:panelGrid columns="8" layout="grid">
+                            <p:outputLabel for="travel" value="Viagem: "/>
+                            <p:selectOneMenu id="travel" value="#{salesController.item.travelPackagesId}" 
+                                             title="Selecione uma viagem" 
+                                             required="true"
+                                             requiredMessage="Selecione uma viagem para adicionar"
+                                             filter="true" filterMatchMode="contains" >
+                                <p:ajax event="change" 
+                                        update="departure, arrival, value, subTotal, :PlotsCreateForm:valueTotal" />
+                                <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{travelPackagesController.itemsAvailableSelectOne}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="departure" value="Data de ida: "/>
+                            <p:outputLabel id="departure" 
+                                           value="#{salesController.item.travelPackagesId.departure}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </p:outputLabel>
+                            <p:outputLabel for="arrival" value="Data de volta: "/>
+                            <p:outputLabel id="arrival" value="#{salesController.item.travelPackagesId.arrival}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </p:outputLabel>
+                            <p:outputLabel for="value" value="Valor: "/>
+                            <p:outputLabel id="value" value="R$ #{salesController.item.travelPackagesId.value}"/>
+                        </p:panelGrid >
+                        <br/>
+                        <p:panelGrid columns="5" layout="grid">
+                            <h:outputLabel for="amount" value="Quantidade: " />
+                            <p:inputNumber id="amount"
+                                           value="#{salesController.item.amount}" 
+                                           decimalPlaces="0" minValue="1"
+                                           emptyValue="1" 
+                                           required="true"
+                                           requiredMessage="Digite um número">
+                                <p:ajax event="change" update="subTotal"/>
+                            </p:inputNumber>
+                            <p:outputLabel for="subTotal" value="Subtotal: "/>
+                            <p:outputLabel id="subTotal" 
+                                           value="R$ #{salesController.subTotal(salesController.item.travelPackagesId.value,
+                                                       salesController.item.amount)}"/>
+                            <p:commandButton value="Adicionar"
+                                             actionListener="#{salesController.addItem()}"
+                                             update="tabela:salesitens, SubTotal, Total, :PlotsCreateForm:valueTotal"
+                                             icon="ui-icon-plus"/>
+                        </p:panelGrid>
+                        <br/>
+                        <p:panelGrid columns="6" layout="grid">
+                            <h:outputText value="Subtotal: " />
+                            <h:outputText id="SubTotal" value="#{salesController.subTotalVenda}">
+                                <f:convertNumber currencySymbol="R$" minFractionDigits="2"
+                                                 type="currency"/>
+                            </h:outputText>
+                            <p:outputLabel value="Desconto: " for="discount" />
+                            <p:inputNumber id="discount" value="#{salesController.selected.discount}" 
+                                           symbol="R$" decimalPlaces="2" decimalSeparator=","
+                                           title="Desconto: " 
+                                           required="false">
+                                <p:ajax event="change" update="tabela:salesitens, Total, SubTotal, :PlotsCreateForm:valueTotal"/>
+                            </p:inputNumber>
+                            <h:outputText value="Total: " />
+                            <h:outputText id="Total" value="#{salesController.total}">
+                                <f:convertNumber currencySymbol="R$" minFractionDigits="2"
+                                                 type="currency"/>
+                            </h:outputText>
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </p:fieldset>
+                <br/>
+                <h:form id="tabela">
+                    <p:dataTable id="salesitens" 
+                                 value="#{salesController.pedido}" var="item"
+                                 editable="true" editMode="cell"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowIndexVar="rowIndex"
+                                 emptyMessage="Sem items">       
+                        <p:ajax event="cellEdit" listener="#{salesController.onCellEdit}"/>
+                        <p:column headerText="Viagem: "> 
+                            <h:outputText value="#{item.travelPackagesId.travel}"/>
+                        </p:column>
+                        <p:column headerText="Quantidade: ">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{item.amount}"/>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputNumber value="#{item.amount}" decimalPlaces="0" minValue="1">
+                                        <p:ajax event="change" update="salesitens :PlotsCreateForm:valueTotal"/>
+                                    </p:inputNumber>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Valor: ">
+                            <h:outputText 
+                                value="#{salesController.getTotalItem(item)}">
+                                <f:convertNumber currencySymbol="R$" 
+                                                 minFractionDigits="2" type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column styleClass="width: 32px">
+                            <p:commandButton id="deleteButton"  icon="ui-icon-closethick" title="Remover"
+                                             actionListener="#{salesController.subItem(item)}" update="salesitens" ajax="false">
+                            </p:commandButton>
+                        </p:column>
+                        <f:facet name="footer">
+                            <h:outputText id="qtdet" value="Qtde: #{salesController.quantidade}    -----     " />
+                            <h:outputText value="Total: "/>
+                            <h:outputText id="totalt" value="#{salesController.total}">
+                                <f:convertNumber currencySymbol="R$" minFractionDigits="2" type="currency" />
+                            </h:outputText>
+                        </f:facet>
+                    </p:dataTable>
+                    <h:panelGrid width="100%" style="text-align: center">
+                        <p:commandButton id="salvar" value="Finalizar"
+                                         icon="ui-icon-cart"
+                                         update=":PlotsCreateForm" 
+                                         oncomplete="PF('PlotsGenereteDialog').show()" 
+                                         />
+                    </h:panelGrid>
+                </h:form>
+            </h:form>
+            <ui:include src="/plots/geraParcela.xhtml"/>
+        </ui:define>
+    </ui:composition>
+</html>

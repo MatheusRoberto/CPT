@@ -148,5 +148,5 @@ public class Sales implements Serializable {
     public String toString() {
         return "Contrato: [ " + id + " ]";
     }
-    
+
 }

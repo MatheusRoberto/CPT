@@ -30,7 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "SalesItems.findAll", query = "SELECT s FROM SalesItems s")
     , @NamedQuery(name = "SalesItems.findById", query = "SELECT s FROM SalesItems s WHERE s.id = :id")
-    , @NamedQuery(name = "SalesItems.findByAmount", query = "SELECT s FROM SalesItems s WHERE s.amount = :amount")})
+    , @NamedQuery(name = "SalesItems.findByAmount", query = "SELECT s FROM SalesItems s WHERE s.amount = :amount")
+    ,@NamedQuery(name = "SalesItems.findBySale", query = "SELECT si FROM SalesItems si INNER JOIN Sales s ON si.salesId = s WHERE si.salesId = :sale")
+    ,@NamedQuery(name = "SalesItems.listAll", query = "SELECT si FROM SalesItems si INNER JOIN Sales s ON si.salesId = s")})
 public class SalesItems implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -118,5 +120,5 @@ public class SalesItems implements Serializable {
     public String toString() {
         return "jpa.entities.SalesItems[ id=" + id + " ]";
     }
-    
+
 }

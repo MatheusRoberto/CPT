@@ -6,6 +6,8 @@ import jsf.util.PaginationHelper;
 import jpa.session.SalesItemsFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -17,6 +19,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import jpa.entities.Sales;
 
 @Named("salesItemsController")
 @SessionScoped
@@ -28,6 +31,9 @@ public class SalesItemsController implements Serializable {
     private jpa.session.SalesItemsFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    private List<SalesItems> salesitems = new ArrayList<>();
+    private List<SalesItems> salesanditems = new ArrayList<>();
+    private SalesItems sale;
 
     public SalesItemsController() {
     }
@@ -192,6 +198,77 @@ public class SalesItemsController implements Serializable {
         return ejbFacade.find(id);
     }
 
+    /**
+     * @return the salesitems
+     */
+    public List<SalesItems> getSalesitems() {
+        return salesitems;
+    }
+
+    /**
+     * @param salesitems the salesitems to set
+     */
+    public void setSalesitems(List<SalesItems> salesitems) {
+        this.salesitems = salesitems;
+    }
+
+    /**
+     * @return the salesanditems
+     */
+    public List<SalesItems> getSalesanditems() {
+        salesanditems = ejbFacade.listItemsAndSale();
+        return salesanditems;
+    }
+
+    /**
+     * @param salesanditems the salesanditems to set
+     */
+    public void setSalesanditems(List<SalesItems> salesanditems) {
+        this.salesanditems = salesanditems;
+    }
+
+    public void findBySale() {
+
+    }
+
+    public int quantidade(Sales s) {
+        int qtde = 0;
+        for (SalesItems item : s.getSalesItemsList()) {
+            qtde += item.getAmount();
+        }
+        return qtde;
+    }
+
+    public double subtotal(Sales s) {
+        double subtotal = 0;
+        for (SalesItems item : s.getSalesItemsList()) {
+            subtotal += (item.getAmount() * item.getTravelPackagesId().getValue());
+        }
+        return subtotal;
+    }
+
+    public double total(Sales s) {
+        return subtotal(s) - s.getDiscount();
+    }
+
+    /**
+     * @return the sale
+     */
+    public SalesItems getSale() {
+        return sale;
+    }
+
+    /**
+     * @param sale the sale to set
+     */
+    public void setSale(SalesItems sale) {
+        this.sale = sale;
+    }
+
+    public void printCust(){
+        System.out.println(sale.getSalesId().getCustomersId().getName());
+    }
+    
     @FacesConverter(forClass = SalesItems.class)
     public static class SalesItemsControllerConverter implements Converter {
 

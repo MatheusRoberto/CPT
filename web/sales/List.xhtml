@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Lista de Vendas"></h:outputText>
+        </ui:define>
+
+        <ui:define class="SalesListForm" name="body">
+            <h:form id="createForm"  acceptcharset="ISO-8859-1">
+                <p:dataTable id="table" 
+                             emptyMessage="Sem vendas" 
+                             paginator="true" 
+                             var="item" value="#{salesItemsController.salesanditems}"
+                             rows="20" rowKey="#{item.id}"
+                             selection="#{salesItemsController.sale}"
+                             selectionMode="single">
+                    <p:ajax event="rowSelect"   update="viewButton" listener="#{salesItemsController.printCust()}"/>
+                    <p:ajax event="rowUnselect" update="viewButton" listener="#{travelPackagesController.prepareCreate()}"/>
+
+                    <p:column headerText="Contrato" style="width: 52px">
+                        <p:outputLabel value="#{item.salesId.id}"/>
+                    </p:column>
+                    <p:column headerText="Cliente">
+                        <p:outputLabel value="#{item.salesId.customersId.name}"/>
+                    </p:column>
+                    <p:column headerText="Data" style="width: 62px">
+                        <p:outputLabel value="#{item.salesId.date}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Quantidade" style="width: 62px">
+                        <p:outputLabel value="#{salesItemsController.quantidade(item.salesId)}"/>
+                    </p:column>
+                    <p:column headerText="Subtotal" style="width: 100px">
+                        <p:outputLabel value="#{salesItemsController.subtotal(item.salesId)}">
+                            <f:convertNumber currencySymbol="R$" minFractionDigits="2" type="currency"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Desconto" style="width: 100px">
+                        <p:outputLabel value="#{item.salesId.discount}">
+                            <f:convertNumber currencySymbol="R$" minFractionDigits="2" type="currency"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Total" style="width: 100px">
+                        <p:outputLabel value="#{salesItemsController.total(item.salesId)}">
+                            <f:convertNumber currencySymbol="R$" minFractionDigits="2" type="currency"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <f:facet name="footer">
+                        <p:commandButton id="viewButton"   icon="ui-icon-pencil" value="Visualizar" 
+                                         update=":SalesItemsViewForm" oncomplete="PF('SalesItemsViewDialog').show()"
+                                         disabled="#{empty salesItemsController.sale}"/>
+                    </f:facet>
+                </p:dataTable>
+            </h:form>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+</html>

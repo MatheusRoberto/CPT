@@ -5,6 +5,7 @@
  */
 package jpa.session;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,4 @@ public class SalesFacade extends AbstractFacade<Sales> {
     public SalesFacade() {
         super(Sales.class);
     }
-    
 }
