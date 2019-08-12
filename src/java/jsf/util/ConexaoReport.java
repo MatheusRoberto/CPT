@@ -70,7 +70,7 @@ public class ConexaoReport {
     public Connection getConexao() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaee_parcela", "root", "madsr1411");
+            conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaee_parcela", "root", "");
             System.out.println("Conexão com banco");
             return conexao;
         } catch (SQLException | ClassNotFoundException ex) {
